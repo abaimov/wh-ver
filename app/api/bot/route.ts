@@ -9,8 +9,17 @@ const token = process.env.TELEGRAM_BOT_TOKEN
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.')
 
 const bot = new Bot(token)
-bot.command('start', async (ctx) => {
-    await ctx.reply('HELLO')
-})
+bot.on('message', async (ctx) => {
+    const messageText = ctx.message.text;
+
+    if (messageText === '/start') {
+        try {
+            // Удалить сообщение, если оно содержит /start
+            await ctx.deleteMessage();
+        } catch (error) {
+            console.error('Failed to delete message:', error);
+        }
+    }
+});
 
 export const POST = webhookCallback(bot, 'std/http')
