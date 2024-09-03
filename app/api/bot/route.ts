@@ -11,7 +11,6 @@ if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.'
 const bot = new Bot(token)
 bot.on('message', async (ctx) => {
     const messageText = ctx.message.text;
-
     if (messageText === '/start') {
         try {
             // Удалить сообщение, если оно содержит /start
