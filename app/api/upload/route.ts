@@ -4,9 +4,11 @@ import {put} from '@vercel/blob';
 export const dynamic = 'force-dynamic'
 
 export const fetchCache = 'force-no-store'
+export const runtime = 'edge';
 
 export async function POST(req: NextRequest) {
     try {
+
         const formData = await req.formData();
         const file = formData.get('file') as File;
 
@@ -29,7 +31,6 @@ export async function POST(req: NextRequest) {
         if (e instanceof Error) {
             errorMessage = e.message;  // Получаем сообщение об ошибке
         }
-
         return NextResponse.json({status: 'fail', message: errorMessage}, {status: 500});
     }
 }

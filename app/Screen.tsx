@@ -14,21 +14,22 @@ interface Image {
 
 export default function Screen({ images }: { images: Image[] }) {
     const [dataImages, setDataImages] = useState<Image[]>(images);
+    let imgClearDeleteElements = []
 
-    const delImg = async (pathname: string) => {
+    const delImg = async (url: string) => {
         try {
             const response = await fetch('/api/delete', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ pathname }),
+                body: JSON.stringify({ url }),
             });
 
             const result = await response.json();
 
             if (response.ok) {
-                setDataImages(prev => prev.filter(image => image.pathname !== pathname));
+                setDataImages(prev => prev.filter(image => image.url !== url));
                 console.log('IMG DEL', result.message);
             } else {
                 console.error('ERROR DELETE IMG', result.message);
@@ -51,7 +52,7 @@ export default function Screen({ images }: { images: Image[] }) {
                     <img src={el.url} alt={`pic${index}`} />
                     <div
                         className="bg-red-200 h-[30px] w-[100px] text-center cursor-pointer"
-                        onClick={() => delImg(el.pathname)}
+                        onClick={() => delImg(el.url)}
                     >
                         DELETE
                     </div>

@@ -1,7 +1,9 @@
 import Screen from './Screen'
-import {list} from '@vercel/blob';
+
 
 export default async function Home() {
-    const response = await list();
-    return <Screen images={response.blobs}/>
+    const response = await fetch('http://localhost:3000/api/get-images', {cache: "no-cache"})
+    const data = await response.json()
+    console.log(data.images.blobs);
+    return <Screen images={data.images.blobs}/>
 }
