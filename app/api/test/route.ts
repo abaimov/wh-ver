@@ -1,27 +1,25 @@
-import { Bot, webhookCallback } from 'grammy';
-import { setDeleteMode, getDeleteMode } from "@/app/lib/state";
-import { NextResponse } from 'next/server';
+import {Bot} from 'grammy';
+import {setDeleteMode, getDeleteMode} from "@/app/lib/state";
+import {NextResponse} from 'next/server';
 
 const token = process.env.TELEGRAM_BOT_TOKEN_SECOND;
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.');
 
 const bot = new Bot(token);
 
-// Обработка сообщений от Telegram
+// Обработка сообщений от Telegram через polling
 bot.on('message', async (ctx) => {
     const messageText = ctx.message.text;
-
     if (messageText === '/start') {
-        if (getDeleteMode()) {
-            await ctx.reply('SUPER');  // В режиме удаления
-        } else {
-            await ctx.reply('HEELLLLLL');  // В обычном режиме
-        }
+        await ctx.reply('SUPER');  // В режиме удаления
+
     }
 });
 
-// Вебхук для Telegram
-const handleTelegramWebhook = webhookCallback(bot, 'std/http');
+// Запуск polling
+bot.start()
+    .then(() => console.log('Бот запущен в режиме polling'))
+    .catch(err => console.error('Ошибка запуска бота:', err));
 
 // POST-запрос для изменения состояния
 export async function POST(req: Request) {
@@ -29,14 +27,14 @@ export async function POST(req: Request) {
 
     if (contentType.includes('application/json')) {
         const body = await req.json();
+        console.log('Получено тело запроса:', body);
 
         if (body && typeof body.value === 'boolean') {
             // Изменение глобального состояния
             setDeleteMode(body.value);
-            return NextResponse.json({ success: true, message: 'Mode updated', isDeleteMode: getDeleteMode() });
+            return NextResponse.json({success: true, message: 'Mode updated', isDeleteMode: getDeleteMode()});
         }
     }
 
-    // Если это запрос от Telegram (вебхук), обрабатываем его
-    return handleTelegramWebhook(req);
+    return NextResponse.json({success: false, message: 'Invalid request'});
 }
