@@ -5,13 +5,13 @@ import {NextResponse} from 'next/server';
 const token = process.env.TELEGRAM_BOT_TOKEN_SECOND;
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.');
 
-let value = true
+
 const bot = new Bot(token);
 
 // Обработка сообщений от Telegram через polling
 bot.on('message', async (ctx) => {
     const messageText = ctx.message.text;
-    if(!value){
+    if(!getDeleteMode()){
         if (messageText === '/start') {
             await ctx.reply('SUPER');  // В режиме удаления
 
