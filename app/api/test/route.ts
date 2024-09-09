@@ -1,28 +1,18 @@
-import {Bot} from 'grammy';
-import {setDeleteMode, getDeleteMode} from "@/app/lib/state";
-import {NextResponse} from 'next/server';
+import { Bot } from 'grammy';
+import { NextResponse } from 'next/server';
 
 const token = process.env.TELEGRAM_BOT_TOKEN_SECOND;
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.');
-
 
 const bot = new Bot(token);
 
 // Обработка сообщений от Telegram через polling
 bot.on('message', async (ctx) => {
     const messageText = ctx.message.text;
-    if(!getDeleteMode()){
-        if (messageText === '/start') {
-            await ctx.reply('SUPER');  // В режиме удаления
 
-        }
-    }else {
-        if (messageText === '/start') {
-            await ctx.reply('GOVNO');  // В режиме удаления
-
-        }
+    if (messageText === '/start') {
+        await ctx.reply('Привет! Я ваш Telegram бот.');
     }
-
 });
 
 // Запуск polling
@@ -30,7 +20,7 @@ bot.start()
     .then(() => console.log('Бот запущен в режиме polling'))
     .catch(err => console.error('Ошибка запуска бота:', err));
 
-// POST-запрос для изменения состояния
+// Обработка POST-запросов для отправки сообщений
 export async function POST(req: Request) {
     const contentType = req.headers.get('content-type') || '';
 
@@ -38,12 +28,15 @@ export async function POST(req: Request) {
         const body = await req.json();
         console.log('Получено тело запроса:', body);
 
-        if (body && typeof body.value === 'boolean') {
-            // Изменение глобального состояния
-            setDeleteMode(body.value);
-            return NextResponse.json({success: true, message: 'Mode updated', isDeleteMode: getDeleteMode()});
+        if (body && body.message) {
+            // Замените `CHAT_ID` на фактический ID чата
+            const chatId = process.env.TELEGRAM_CHAT_ID;
+            if (!chatId) throw new Error('TELEGRAM_CHAT_ID environment variable not found.');
+
+            await bot.api.sendMessage(chatId, body.message);
+            return NextResponse.json({ success: true, message: 'Message sent' });
         }
     }
 
-    return NextResponse.json({success: false, message: 'Invalid request'});
+    return NextResponse.json({ success: false, message: 'Invalid request' });
 }
