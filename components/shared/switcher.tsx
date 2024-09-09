@@ -1,7 +1,4 @@
 'use client';
-
-import {useState} from 'react';
-
 export default function Switcher() {
     const toggleMode = async (str: string) => {
         await fetch('/api/test', {

@@ -1,10 +1,7 @@
-'use client'
+import Screen from './Screen'
+import {list} from '@vercel/blob';
 
-import Switcher from "@/components/shared/switcher";
-
-export default function Home() {
-    return <>
-        <Switcher/>
-
-    </>
+export default async function Home() {
+    const response = await list();
+    return <Screen images={response.blobs}/>
 }
