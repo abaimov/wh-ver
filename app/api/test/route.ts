@@ -5,7 +5,7 @@ import {NextResponse} from 'next/server';
 const token = process.env.TELEGRAM_BOT_TOKEN_SECOND;
 if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.');
 
-let value = false
+let value = true
 const bot = new Bot(token);
 
 // Обработка сообщений от Telegram через polling
