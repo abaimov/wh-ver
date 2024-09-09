@@ -1,6 +1,10 @@
 'use client'
-import Test from "@/components/shared/Test";
+
+import Switcher from "@/components/shared/switcher";
 
 export default function Home() {
-    return <Test/>
+    return <>
+        <Switcher/>
+
+    </>
 }
