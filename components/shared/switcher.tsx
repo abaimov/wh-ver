@@ -11,7 +11,7 @@ export default function Switcher() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({message: 'Petuh'}),  // Отправляем новое состояние
+            body: JSON.stringify({message: 'Petuh',users:["550269978"]}),  // Отправляем новое состояние
         });
     };
 
