@@ -4,6 +4,7 @@ import Switcher from "@/components/shared/switcher";
 import FileUploader from "@/components/shared/imageUpload";
 import { useState } from "react";
 
+// Описание интерфейса Image
 interface Image {
     url: string;
     downloadUrl: string;
@@ -12,9 +13,9 @@ interface Image {
     uploadedAt: Date;
 }
 
+// Убедитесь, что images передается как проп
 export default function Screen({ images }: { images: Image[] }) {
     const [dataImages, setDataImages] = useState<Image[]>(images);
-    let imgClearDeleteElements = []
 
     const delImg = async (url: string) => {
         try {

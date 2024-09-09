@@ -4,7 +4,7 @@ import {put} from '@vercel/blob';
 export const dynamic = 'force-dynamic'
 
 export const fetchCache = 'force-no-store'
-export const runtime = 'edge';
+export const runtime = 'nodejs';
 
 export async function POST(req: NextRequest) {
     try {
