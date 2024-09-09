@@ -6,7 +6,7 @@ if (!token) throw new Error('TELEGRAM_BOT_TOKEN environment variable not found.'
 
 const bot = new Bot(token);
 
-// Обработка POST-запросов для отправки сообщений
+// Обработка POST-запросов для отправки сообщений с текстом и изображением
 export async function POST(req: Request) {
     const contentType = req.headers.get('content-type') || '';
 
@@ -14,16 +14,19 @@ export async function POST(req: Request) {
         const body = await req.json();
         console.log('Получено тело запроса:', body);
 
-        const { message, users } = body;
+        const { message, users, img } = body;
 
-        if (message && Array.isArray(users) && users.length > 0) {
+        if (message && Array.isArray(users) && users.length > 0 && img) {
             try {
-                // Отправляем сообщение каждому пользователю из массива users
+                // Отправляем сообщение и изображение каждому пользователю из массива users
                 for (const userId of users) {
-                    await bot.api.sendMessage(userId, message);
+                    // Отправка изображения с текстом
+                    await bot.api.sendPhoto(userId, img, {
+                        caption: message,  // Текстовое сообщение, прикреплённое к изображению
+                    });
                 }
 
-                return NextResponse.json({ success: true, message: 'Messages sent to all users' });
+                return NextResponse.json({ success: true, message: 'Messages with images sent to all users' });
             } catch (err) {
                 console.error('Ошибка при отправке сообщений:', err);
                 return NextResponse.json({ success: false, message: 'Error sending messages' });
