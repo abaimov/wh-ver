@@ -15,7 +15,7 @@ export default function Switcher() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ value: newMode }),
+            body: JSON.stringify({ value: newMode }),  // Отправляем новое состояние
         });
     };
 

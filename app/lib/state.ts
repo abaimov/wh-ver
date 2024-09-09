@@ -1,13 +1,14 @@
-// app/lib/globalState.ts
+// app/lib/state.ts
 
-let isDeleteMode = false;  // Глобальное состояние
+let isDeleteMode = false;
 
-// Функция для изменения состояния
+// Функция для изменения режима
 export function setDeleteMode(value: boolean) {
     isDeleteMode = value;
+    console.log('Delete mode set to:', value);  // Логируем изменения
 }
 
-// Функция для получения текущего состояния
+// Функция для получения текущего режима
 export function getDeleteMode() {
     return isDeleteMode;
 }
