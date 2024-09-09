@@ -1,7 +1,9 @@
 // app/api/delete/route.ts
 import {NextRequest, NextResponse} from 'next/server';
 import {del} from '@vercel/blob';
+export const dynamic = 'force-dynamic'
 
+export const fetchCache = 'force-no-store'
 export async function POST(req: NextRequest) {
     try {
         const {pathname} = await req.json();
